@@ -29,6 +29,8 @@ abstract contract Setup is BaseSetup, ActorManager, AssetManager, Utils {
     ERC20Mock asset;
     ERC20Mock liability;
 
+    constant uint256 LLTV = 8e17;
+
     // Struct
     MarketParams marketParams;
 
@@ -52,14 +54,15 @@ abstract contract Setup is BaseSetup, ActorManager, AssetManager, Utils {
         // @dev go to the function and see the requires for creating a market
         // @dev we will see there that IRM and LTVL need to be enabled
         morpho.enableIrm(address(irm));
-        morpho.enableLltv(8e17); // This can be dynamic
+        //morpho.enableLltv(8e17); // This can be dynamic
+        morpho.enableLltv(LLTV); //dynamic replacement use
 
         marketParams = MarketParams({
             loanToken: address(liability),
             collateralToken: address(asset),
             oracle: address(oracle),
             irm: address(irm),
-            lltv: 8e17
+            lltv: LLTV
         });
 
         morpho.createMarket(marketParams);
